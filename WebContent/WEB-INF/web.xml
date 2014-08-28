@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>Venus</display-name>
+  <servlet>
+    <servlet-name>HelloWorldExample</servlet-name>
+    <servlet-class>com.enjoy.venus.admin.HelloWorldExample</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HelloWorldExample</servlet-name>
+    <url-pattern>/admin/HelloWorldExample</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>Admin</servlet-name>
+    <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
+    <init-param>
+      <param-name>org.restlet.application</param-name>
+      <param-value>com.enjoy.venus.admin.RestApp</param-value>
+    </init-param>
+  </servlet>
+  
+  
+  <servlet-mapping>
+    <servlet-name>Admin</servlet-name>
+    <url-pattern>/admin/*</url-pattern>
+  </servlet-mapping>
+  
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+</web-app>
