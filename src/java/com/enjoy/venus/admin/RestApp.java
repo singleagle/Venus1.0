@@ -2,6 +2,7 @@ package com.enjoy.venus.admin;
 
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import javax.management.RuntimeErrorException;
 import javax.servlet.http.HttpSession;
@@ -19,16 +20,20 @@ import com.enjoy.venus.persistence.PersistenceEntityFactory;
 import com.enjoy.venus.persistence.mongo.MongoTokenManager;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
+import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
 public class RestApp extends org.restlet.Application{
 	
 	public static final String ATTR_DBCLIEN = "dbclien";
 	
-	public static final String USERS = "users";
-	public static final String USERID_SEGMENT = "/{useId}";
-	public static final String DISTRACTIONS = "distraction";
-	public static final String DISTRACTIONS_SEGMENT = "/{actionId}";
+	public static final String USERS = "/users";
+	
+	public static final String USER_VARIABLE = "userId";
+	public static final String USERID_SEGMENT = "/{" + USER_VARIABLE +"}";
+	public static final String DISTRACTIONS = "/distractions";
+	public static final String DISTRACTION_VARIABLE = "actionId";
+	public static final String DISTRACTION_SEGMENT = "/{" + DISTRACTION_VARIABLE + "}";
 	
 	Router mRouter;
 	private TokenManager mTokenManager;
@@ -49,7 +54,10 @@ public class RestApp extends org.restlet.Application{
 		
 		MongoClientOptions.Builder optionBuider = new MongoClientOptions.Builder();
 		optionBuider.legacyDefaults();
-		mMongoClient = new MongoClient(serverAddress, optionBuider.build());
+		MongoCredential credential = MongoCredential.createMongoCRCredential("tangwh", "venus", "yl04688".toCharArray());
+		ArrayList<MongoCredential> credentialList = new ArrayList<MongoCredential>(1);
+		credentialList.add(credential);
+		mMongoClient = new MongoClient(serverAddress, credentialList, optionBuider.build());
 		mTokenManager = new MongoTokenManager(mMongoClient.getDB("venus"));
 	}
 	
@@ -63,7 +71,9 @@ public class RestApp extends org.restlet.Application{
 		mRouter.attachDefault(UserCollectionResource.class);
 		mRouter.attach(USERS, UserCollectionResource.class);
 		mRouter.attach(USERS + USERID_SEGMENT, UserResource.class);
-          
+		mRouter.attach(DISTRACTIONS, DistractionCollectionResource.class);
+		mRouter.attach(DISTRACTIONS + DISTRACTION_SEGMENT , DistractionResource.class);
+		
         //创建认证器  
         ChallengeAuthenticator authenticator = new ChallengeAuthenticator(getContext(), ChallengeScheme.HTTP_BASIC,   
                 "Venus Ream");  

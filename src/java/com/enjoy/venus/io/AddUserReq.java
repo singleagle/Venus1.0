@@ -1,5 +1,11 @@
 package com.enjoy.venus.io;
 
-public class AddUserReq {
+import com.enjoy.venus.data.UserRecord;
 
+public class AddUserReq extends UserRecord{
+	
+	public AddUserReq() {
+		super();
+		setUin(-1);
+	}
 }

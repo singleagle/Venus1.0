@@ -2,10 +2,12 @@ package com.enjoy.venus.persistence.mongo;
 
 import java.lang.reflect.Field;
 
+import com.enjoy.venus.data.PayType;
 import com.enjoy.venus.persistence.IEntity;
 import com.enjoy.venus.persistence.IPOJOConverter;
 import com.enjoy.venus.persistence.IPOJOable;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.MongoException;
@@ -15,7 +17,10 @@ public class JsonConverter implements IPOJOConverter{
 	Gson mGson;
 	
 	public JsonConverter(){
-		mGson = new Gson();
+		GsonBuilder gsonBuilder = new GsonBuilder();  
+	    gsonBuilder.registerTypeAdapter(PayType.class,  
+	                new PayType.PayTypeSerializer());  
+	    mGson = gsonBuilder.create();
 	}
 	
 	@Override
@@ -51,7 +56,7 @@ public class JsonConverter implements IPOJOConverter{
 		}
 		String content = mGson.toJson(src);
 		
-		BasicDBObject entity = (BasicDBObject)JSON.parse(content);
+		DBObject entity = (DBObject)JSON.parse(content);
 		return new MongoEntity(entity);
 	}
 

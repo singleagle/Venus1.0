@@ -15,9 +15,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.WriteResult;
-import com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl;
 
-public class UserResource extends DBDataResource {
+public class DistractionResource extends DBDataResource {
 	DBCollection mUserColl;
 	long uin;
     
@@ -29,23 +28,6 @@ public class UserResource extends DBDataResource {
 	}
 	
 	
-	
-	@Override
-	protected Representation get() throws ResourceException {
-		BasicDBObject query = new BasicDBObject();
-		query.append("uin", uin);
-		DBObject dbEntity  = mUserColl.findOne(query);
-		if(dbEntity == null){
-			doError(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
-			return null;
-		}
-		
-		UserRecord newRecord = getJsonConverter().fromEntity(new MongoEntity(dbEntity), UserRecord.class);
-		return new JsonResponse<UserRecord>(newRecord);
-	}
-
-
-
 	@Override
 	protected Representation put(Representation entity)
 			throws ResourceException {
@@ -63,9 +45,9 @@ public class UserResource extends DBDataResource {
 		BasicDBObject query = new BasicDBObject();
 		query.append("uin", uin);
 		DBObject dbEntity  = mUserColl.findAndModify(query, newUserInfo);
-		UserRecord newRecord = getJsonConverter().fromEntity(new MongoEntity(dbEntity), UserRecord.class);
+		UserRecord newRecord = getJsonConverter().fromEntity(new MongoEntity(dbEntity), UserRecord.class);;
 		
-		return new JsonResponse<UserRecord>(newRecord);
+		return new GsonRepresentation<UserRecord>(newRecord);
 	}
 	
 	@Override
@@ -75,10 +57,8 @@ public class UserResource extends DBDataResource {
 		DBObject entity = mUserColl.findAndRemove(query);
 		if(entity == null){
 			doError(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
-			return null;
 		}
-		
 		UserRecord delRecord = getJsonConverter().fromEntity(new MongoEntity(entity), UserRecord.class);
-		return new JsonResponse<UserRecord>(delRecord);
+		return new GsonRepresentation<UserRecord>(delRecord);
 	}
 }

@@ -1,74 +1,190 @@
 <!doctype html public "-//w3c//dtd html 4.0 transitional//en">
 <html>
 <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-   <meta name="GENERATOR" content="Mozilla/4.61 [en] (WinNT; I) [Netscape]">
-   <meta name="Author" content="tangwh">
-   <title>Venus Adim console</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="GENERATOR" content="Mozilla/4.61 [en] (WinNT; I) [Netscape]">
+<meta name="Author" content="tangwh">
+<title>Venus Adim console</title>
 </head>
 <body bgcolor="#FFFFFF">
 
-<b><font face="Arial, Helvetica, sans-serif">
-	<font size=+2>
-		Venus Adim console
-	</font>
-</font></b>
+	<b><font face="Arial, Helvetica, sans-serif"> <font size=+2>
+				Venus Adim console </font>
+	</font></b>
 
-<form action="admin/users" method="post">
-	  <p>用户名: <input type="text" name="name" size="20" /></p>
-	  <p>密码:  <input type="password" name="password" size="20" /></p>
-	  <input type="submit" value="注册" />
-</form>
+	<table BORDER=0 CELLSPACING=5 WIDTH="85%">
+		<td>
+			<form title="User" action="#/admin/users" method="post" onsubmit="return submitRegesist(this);">
+				<p>
+					用户名: <input type="text" name="username" size="20" />
+				</p>
+				<p>
+					手机号: <input type="text" name="phoneNO" size="20" />
+				</p>
+				<p>
+					密码: <input type="password" name="password" size="20" />
+				</p>
+				<p>
+					<input type="submit" value="注册"  />
+					<input type="button" value="修改密码" onclick=" updatePassword(this.form)" />
+					<input type="button" value="删除用户" onclick=" deleteUser(this.form)" />
+				</p>
+			</form>
+		</td>
 
-<table BORDER=0 CELLSPACING=5 WIDTH="85%" >
-<tr VALIGN=TOP>
-<td>Mongodb</td>
+		<td>
+			<form title="Distraction" action="admin/distractions" method="post">
+				<p>
+					标题: <input type="text" name="title" size="20" />
+				</p>
+				<p>
+					简介: <input type="text" name="description" size="20" />
+				</p>
+				<p>
+					消费方式: <input type="text" name="paytype" size="20" />
+				</p>
+				<p>
+					经度: <input type="text" name="longitude" size="20" />
+				</p>
+				<p>
+					纬度: <input type="text" name="latitude" size="20" />
+				</p>
+				
+				<p>
+					最远距离: <input type="text" name="distancemile" size="20" />
+				</p>
+				
+				<p>
+					<input type="submit" value="发起活动"  />
+					<input type="button" value="获取活动" onclick="this.form.method='get';  this.form.submit();" />
+					<input type="button" value="删除活动" onclick=" deleteUser(this)" />
+				</p>
+			</form>
+		</td>
+	</table>
 
-<td VALIGN=TOP WIDTH="30%"><a href="admin/users"><img SRC="images/execute.gif" HSPACE=4 BORDER=0  align=TOP></a><a href="admin/users">Add User</a></td>
+	<table BORDER=0 CELLSPACING=5 WIDTH="85%">
+		<tr VALIGN=TOP>
+			<td>Mongodb</td>
+			<td> <a href="admin/users">Query User</a></td>
+		</tr>
 
-<td WIDTH="30%"><a href="helloworld.html"><img SRC="images/code.gif" HSPACE=4 BORDER=0 height=24 width=24 align=TOP></a><a href="admin/users">Query User</a></td>
-</tr>
+		<tr VALIGN=TOP>
+			<td>Distraction</td>
 
-<tr VALIGN=TOP>
-<td>Request Info</td>
+			<td> <a href="admin/distractions" onclick="getAllAction()" >Query Distraction</a></td>
 
-<td WIDTH="30%"><a href="servlet/RequestInfoExample"><img SRC="images/execute.gif" HSPACE=4 BORDER=0  align=TOP></a><a href="servlet/RequestInfoExample">Execute</a></td>
+		</tr>
 
-<td WIDTH="30%"><a href="reqinfo.html"><img SRC="images/code.gif" HSPACE=4 BORDER=0 height=24 width=24 align=TOP></a><a href="reqinfo.html">Source</a></td>
-</tr>
+		<tr VALIGN=TOP>
+			<td>Request Headers</td>
 
-<tr VALIGN=TOP>
-<td>Request Headers</td>
+			<td WIDTH="30%"><a href="servlet/RequestHeaderExample"><img
+					SRC="images/execute.gif" HSPACE=4 BORDER=0 align=TOP></a><a
+				href="servlet/RequestHeaderExample">Execute</a></td>
 
-<td WIDTH="30%"><a href="servlet/RequestHeaderExample"><img SRC="images/execute.gif" HSPACE=4 BORDER=0  align=TOP></a><a href="servlet/RequestHeaderExample">Execute</a></td>
+			<td WIDTH="30%"><a href="reqheaders.html"><img
+					SRC="images/code.gif" HSPACE=4 BORDER=0 height=24 width=24
+					align=TOP></a><a href="reqheaders.html">Source</a></td>
+		</tr>
 
-<td WIDTH="30%"><a href="reqheaders.html"><img SRC="images/code.gif" HSPACE=4 BORDER=0 height=24 width=24 align=TOP></a><a href="reqheaders.html">Source</a></td>
-</tr>
 
-<tr VALIGN=TOP>
-<td>Request Parameters</td>
+	</table>
 
-<td WIDTH="30%"><a href="servlet/RequestParamExample"><img SRC="images/execute.gif" HSPACE=4 BORDER=0  align=TOP></a><a href="servlet/RequestParamExample">Execute</a></td>
-
-<td WIDTH="30%"><a href="reqparams.html"><img SRC="images/code.gif" HSPACE=4 BORDER=0 height=24 width=24 align=TOP></a><a href="reqparams.html">Source</a></td>
-</tr>
-
-<tr VALIGN=TOP>
-<td>Cookies</td>
-
-<td WIDTH="30%"><a href="servlet/CookieExample"><img SRC="images/execute.gif" HSPACE=4 BORDER=0  align=TOP></a><a href="servlet/CookieExample">Execute</a></td>
-
-<td WIDTH="30%"><a href="cookies.html"><img SRC="images/code.gif" HSPACE=4 BORDER=0 height=24 width=24 align=TOP></a><a href="cookies.html">Source</a></td>
-</tr>
-
-<tr VALIGN=TOP>
-<td>Sessions</td>
-
-<td WIDTH="30%"><a href="servlet/SessionExample"><img SRC="images/execute.gif" HSPACE=4 BORDER=0  align=TOP></a><a href="servlet/SessionExample">Execute</a></td>
-
-<td WIDTH="30%"><a href="sessions.html"><img SRC="images/code.gif" HSPACE=4 BORDER=0 height=24 width=24 align=TOP></a><a href="sessions.html">Source</a></td>
-</tr>
-</table>
-
+    <div id="content-wrapper">
+      <div id="content">
+                
+        &nbsp; 
+                
+      </div>
+    </div>
+      
 </body>
+
+<script type="text/javascript">
+	var app_config = {};
+	var core_regex_base = {};
+</script>
+<script src="js/require.js" data-main="js/main"></script>
+
+<script type="text/javascript">   
+
+	function format_json( json_str )
+	{
+	  if( JSON.stringify && JSON.parse )
+	  {
+		
+	    json_str = JSON.stringify( JSON.parse( json_str ), undefined, 2);    
+	  }
+	
+	  return json_str;
+	}
+	
+    function submitRegesist (form) {   
+        if(form.username.value == ""){
+            alert("user name is null");
+            
+            form.username.focus();
+            return false;
+        }
+
+        var content_element = $( '#content' );
+        var postData = "name:" + form.username.value +",phoneNO:"+form.phoneNO.value + ",password:" + form.password.value;
+        var urlString = 'admin/users';//from.action.replace(/\/#\//, "");
+        jQuery.ajax(
+        		{
+        			context : content_element, 
+	        		url : urlString,
+	        		type : 'post',
+	        		contentType : "application/json; charset=utf-8", 
+	        		data : '{' + postData + '}',
+	        		dataType : 'json',
+	        		success : function(response){
+	        			var content = '<p>' + JSON.stringify(response, undefined, 2) + '</p>';
+	        			this.html(content);
+	        		}, 
+	        		error : function(response){
+	        			var content = '<p>' + response + '</p>';
+	        			this.html(content);
+	        		}
+        		}
+        		);
+        return false;  
+  
+    }   
+    
+    function updatePassword(form){
+        var content_element = $( '#content' );
+        var putData = "phoneNO:"+form.phoneNO.value + ",password:" + form.password.value;
+        var urlString = 'admin/users/' + form.username.value;
+        $.ajax(
+       		{
+       			context : content_element, 
+       			type : 'put',
+       			url : urlString,
+		        data : '{' + putData + '}',
+		        success : function(response){
+		        	var content = "put password:" + JSON.stringify(response, undefined, 2);
+		        	this.html(content);
+		        } 		
+       		}
+        );
+    }
+    
+  
+    function deleteUser(form){
+    	var urlString = 'admin/users/' + form.username.value;
+        $.ajax(
+           		{
+           			context : $( '#content' ), 
+           			type : 'delete',
+           			url : urlString,
+    		        success : function(response){
+    		        	var content =  "del user:" + JSON.stringify(response, undefined, 2);
+    		        	this.html(content);
+    		        } 		
+           		}
+            );
+    }
+</script >
 </html>
