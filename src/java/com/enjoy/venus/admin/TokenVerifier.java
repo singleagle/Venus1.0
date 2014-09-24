@@ -1,7 +1,9 @@
 package com.enjoy.venus.admin;
 
 
+import org.restlet.data.ClientInfo;
 import org.restlet.security.SecretVerifier;
+import org.restlet.security.User;
 
 public class TokenVerifier extends SecretVerifier{
 	      
@@ -13,7 +15,7 @@ public class TokenVerifier extends SecretVerifier{
          */  
         if(identifier == null || identifier.equals("")){  
             return SecretVerifier.RESULT_INVALID ;  
-        }else if(identifier.equals( new String(secret) )){  
+        }else if(identifier.equals( new String(secret) )){ 
             return SecretVerifier.RESULT_VALID ;  
         }else{  
             return SecretVerifier.RESULT_INVALID ;  

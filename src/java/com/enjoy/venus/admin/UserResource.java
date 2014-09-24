@@ -2,13 +2,14 @@ package com.enjoy.venus.admin;
 
 import java.io.IOException;
 
+import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.ext.gson.GsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import com.enjoy.venus.data.UserRecord;
+import com.enjoy.venus.db.record.UserRecord;
 import com.enjoy.venus.persistence.IEntity;
 import com.enjoy.venus.persistence.mongo.MongoEntity;
 import com.mongodb.BasicDBObject;
@@ -50,19 +51,27 @@ public class UserResource extends DBDataResource {
 	protected Representation put(Representation entity)
 			throws ResourceException {
 		UserRecord record = null;
-		try {
-			GsonRepresentation<UserRecord> gsonRep = new GsonRepresentation<UserRecord>(entity, UserRecord.class);
-			record = gsonRep.getObject();
-		} catch (IOException e) {
-			doError(Status.CLIENT_ERROR_UNPROCESSABLE_ENTITY);
-			return null;
+		BasicDBObject newUserInfo =  new BasicDBObject();
+		Form form = new Form(entity);
+		String name = form.getFirstValue("name");
+		if(name != null){
+			newUserInfo.put("name", name);
 		}
-
-		record.setUin(uin);
-		IEntity newUserInfo = getJsonConverter().toEntity(record);
+		String phoneNO = form.getFirstValue("phoneNO");
+		
+		if(phoneNO != null){
+			newUserInfo.put("phoneNO", phoneNO);
+		}
+		
+		String pw =form.getFirstValue("password");
+		if(pw != null){
+			newUserInfo.put("password", pw);
+		}
+		
 		BasicDBObject query = new BasicDBObject();
 		query.append("uin", uin);
-		DBObject dbEntity  = mUserColl.findAndModify(query, newUserInfo);
+		//只修改newUserInfo设置的字段
+		DBObject dbEntity  = mUserColl.findAndModify(query, new BasicDBObject("$set", newUserInfo));
 		UserRecord newRecord = getJsonConverter().fromEntity(new MongoEntity(dbEntity), UserRecord.class);
 		
 		return new JsonResponse<UserRecord>(newRecord);

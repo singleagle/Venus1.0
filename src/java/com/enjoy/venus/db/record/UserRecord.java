@@ -1,15 +1,20 @@
-package com.enjoy.venus.data;
+package com.enjoy.venus.db.record;
 
 import com.enjoy.venus.persistence.IEntity;
 import com.enjoy.venus.persistence.IPOJOable;
 import com.mongodb.DBObject;
 
 public class UserRecord /*implements IPOJOable*/ {
+	static public final int SEX_UNKNOWN = 0;
+	static public final int SEX_MALE = 1;
+	static public final int SEX_WOMAN = 2;
+	
 	long uin;
 	String name;
 	String headerImgPath;
 	String phoneNO;
 	String password;
+	int sexType; 
 	
 	public UserRecord() {
 		uin = -1;

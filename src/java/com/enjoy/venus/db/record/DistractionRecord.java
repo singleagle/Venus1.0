@@ -1,4 +1,4 @@
-package com.enjoy.venus.data;
+package com.enjoy.venus.db.record;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -11,14 +11,17 @@ import org.bson.types.ObjectId;
  * @author tangwh
  *
  */
-public class Distraction {
+public class DistractionRecord {
 	private String _id;
 	private String title;
 	private long creatTime;
-	private long endTime;
+	private long startTime;
 	private long creatUserId;
 	private String description;
-	private String destination;//?
+	private String origin; //始发地
+	private double[] originLocation = new double[2];
+	
+	private String destination;//目的地
 	private double[] location = new double[2];
 	private ArrayList<Long> teamMemberList;
 	private ArrayList<String> tagList;
@@ -27,7 +30,7 @@ public class Distraction {
 	private int minMemberCount;
 	
 	
-	public Distraction() {
+	public DistractionRecord() {
 	}
 	
 	
@@ -50,18 +53,17 @@ public class Distraction {
 	}
 
 
-
 	public long getCreatTime() {
 		return creatTime;
 	}
 	public void setCreatTime(long creatTime) {
 		this.creatTime = creatTime;
 	}
-	public long getEndTime() {
-		return endTime;
+	public long getStartTime() {
+		return startTime;
 	}
-	public void setEndTime(long endTime) {
-		this.endTime = endTime;
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
 	}
 	public String getDescription() {
 		return description;
@@ -69,6 +71,30 @@ public class Distraction {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	
+	
+	public String getOrigin() {
+		return origin;
+	}
+
+
+	public void setOrigin(String origin) {
+		this.origin = origin;
+	}
+
+
+	public double[] getOriginLocation() {
+		return originLocation.clone();
+	}
+
+
+	public void setOriginLocation(double[] originLocation) {
+		this.originLocation[0] = originLocation[0];
+		this.originLocation[1] = originLocation[1];
+	}
+
+
 	public String getDestination() {
 		return destination;
 	}
@@ -90,12 +116,12 @@ public class Distraction {
 		this.location[1] = location[1];
 	}
 	
-	public double getLatitude() {
+	public double getDestLatitude() {
 		return location[1];
 	}
 
 
-	public double getLongitude() {
+	public double getDestLongitude() {
 		return location[0];
 	}
 	

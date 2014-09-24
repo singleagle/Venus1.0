@@ -1,4 +1,4 @@
-package com.enjoy.venus.io;
+package com.enjoy.venus.clientdata;
 
 public class BaseResponse {
 	int statecode;
@@ -6,15 +6,19 @@ public class BaseResponse {
 	Object body;
 	
 	public BaseResponse(){
-		statecode = 0;
-		stateDescription = "success";
+		this(0, "success", null);
 	}
 	
 	public BaseResponse(Object body){
-		this();
-		this.body = body;
+		this(0, "success", body);
 	}
 	
+	public BaseResponse(int statecode, String stateDescription, Object body) {
+		this.statecode = statecode;
+		this.stateDescription = stateDescription;
+		this.body = body;
+	}
+
 	public int getStatecode() {
 		return statecode;
 	}

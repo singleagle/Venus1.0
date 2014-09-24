@@ -30,7 +30,6 @@ require
     'lib/order!lib/highlight',
     'lib/order!lib/linker',
     'lib/order!lib/ZeroClipboard',
-    'lib/order!lib/d3',
     'lib/order!lib/chosen',
     'lib/order!scripts/app',
 

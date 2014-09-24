@@ -73,7 +73,7 @@ public class RestApp extends org.restlet.Application{
 		mRouter.attach(USERS + USERID_SEGMENT, UserResource.class);
 		mRouter.attach(DISTRACTIONS, DistractionCollectionResource.class);
 		mRouter.attach(DISTRACTIONS + DISTRACTION_SEGMENT , DistractionResource.class);
-		
+		/*
         //创建认证器  
         ChallengeAuthenticator authenticator = new ChallengeAuthenticator(getContext(), ChallengeScheme.HTTP_BASIC,   
                 "Venus Ream");  
@@ -83,8 +83,8 @@ public class RestApp extends org.restlet.Application{
         authenticator.setVerifier(verifier);  
           
         //将路由器放在认证器之后  
-        authenticator.setNext(mRouter); 
-		return authenticator;
+        authenticator.setNext(mRouter); */
+		return mRouter;
 	}
 
 	@Override

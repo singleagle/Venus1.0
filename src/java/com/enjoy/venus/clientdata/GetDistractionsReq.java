@@ -1,20 +1,18 @@
-package com.enjoy.venus.io;
+package com.enjoy.venus.clientdata;
 
 public class GetDistractionsReq{
 	double longitude;
 	double latitude;
-	double distanceMile;
+	double distanceMeters;
 	
 	String ipAddr;
+	String address;
 	long fromTimeMs;
 	long endTimeMs;
 	int fromIndex;
 	int maxItemPerPage;
+	String favarateTagList;
 	
-	public GetDistractionsReq() {
-		super();
-	}
-
 	public double getLongitude() {
 		return longitude;
 	}
@@ -52,12 +50,12 @@ public class GetDistractionsReq{
 		this.endTimeMs = endTimeMs;
 	}
 
-	public double getDistanceMile() {
-		return distanceMile;
+	public double getDistanceMeters() {
+		return distanceMeters;
 	}
 
-	public void setDistanceMile(double distanceMile) {
-		this.distanceMile = distanceMile;
+	public void setDistanceMeters(double distanceMeters) {
+		this.distanceMeters = distanceMeters;
 	}
 
 	public int getFromIndex() {
@@ -75,7 +73,13 @@ public class GetDistractionsReq{
 	public void setMaxItemPerPage(int maxItemPerPage) {
 		this.maxItemPerPage = maxItemPerPage;
 	}
-	
-	
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
 	
 }

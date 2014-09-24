@@ -8,7 +8,7 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import com.enjoy.venus.data.UserRecord;
+import com.enjoy.venus.db.record.UserRecord;
 import com.enjoy.venus.persistence.IEntity;
 import com.enjoy.venus.persistence.mongo.JsonConverter;
 import com.mongodb.BasicDBObject;

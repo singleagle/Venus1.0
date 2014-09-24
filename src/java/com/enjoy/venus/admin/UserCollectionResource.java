@@ -20,9 +20,9 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import com.enjoy.venus.data.UserRecord;
-import com.enjoy.venus.io.AddUserReq;
-import com.enjoy.venus.io.BaseResponse;
+import com.enjoy.venus.clientdata.AddUserReq;
+import com.enjoy.venus.clientdata.BaseResponse;
+import com.enjoy.venus.db.record.UserRecord;
 import com.enjoy.venus.persistence.IEntity;
 import com.enjoy.venus.persistence.mongo.EntityIDMananger;
 import com.enjoy.venus.persistence.mongo.JsonConverter;
@@ -50,6 +50,7 @@ public class UserCollectionResource extends DBDataResource {
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		mUserColl = getCollection("user");
+		mUserColl.createIndex(new BasicDBObject("uin", "1"), new BasicDBObject("unique", true));
 	}
 
 	@Override
@@ -121,6 +122,7 @@ public class UserCollectionResource extends DBDataResource {
 		
 		UserRecord userRecord = new UserRecord(uin, req.getName());
 		IEntity record = creatUserRecord(userRecord, req.getPassword());
+		
 		return  new JsonResponse<UserRecord>(userRecord);
 	}
 	

@@ -1,4 +1,4 @@
-package com.enjoy.venus.data;
+package com.enjoy.venus.db.record;
 
 import java.lang.reflect.Type;
 
