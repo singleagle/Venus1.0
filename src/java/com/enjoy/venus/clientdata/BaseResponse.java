@@ -1,6 +1,9 @@
 package com.enjoy.venus.clientdata;
 
 public class BaseResponse {
+	static public final int ERROR_BAD_REQUEST = 400;
+	static public final int ERROR_UNAUTHORIZED = 401;
+	
 	int statecode;
 	String stateDescription;
 	Object body;

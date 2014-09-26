@@ -11,7 +11,7 @@ public class UserRecord /*implements IPOJOable*/ {
 	
 	long uin;
 	String name;
-	String headerImgPath;
+	String headerImgUrl;
 	String phoneNO;
 	String password;
 	int sexType; 
@@ -64,24 +64,24 @@ public class UserRecord /*implements IPOJOable*/ {
 		return name;
 	}
 
-	public String getHeaderImgPath() {
-		return headerImgPath;
+	public String getHeaderImgUrl() {
+		return headerImgUrl;
 	}
 
-	public void setHeaderImgPath(String headerImgPath) {
-		this.headerImgPath = headerImgPath;
+	public void setHeaderImgUrl(String headerImgUrl) {
+		this.headerImgUrl = headerImgUrl;
 	}
 	
 	public void writeToEntity(IEntity dest, int flags) {
 		dest.put("uin", uin);
 		dest.put("name", name);
-		dest.put("headerImgPath", headerImgPath);
+		dest.put("headerImgUrl", headerImgUrl);
 	}
 	
 	private UserRecord(IEntity entity){
 		uin = (long)entity.get("uin");
 		name = (String)entity.get("name");
-		headerImgPath = (String)entity.get("headerImgPath");
+		headerImgUrl = (String)entity.get("headerImgUrl");
 	}
 	
 	public static final IPOJOable.Creator CREATOR = new IPOJOable.Creator(){

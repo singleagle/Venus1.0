@@ -46,8 +46,6 @@ import org.restlet.ext.oauth.internal.AuthSession;
 import org.restlet.ext.oauth.internal.Client;
 import org.restlet.ext.oauth.internal.Token;
 
-import com.enjoy.venus.persistence.IEntityProvider;
-import com.enjoy.venus.persistence.PersistenceEntityFactory;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -62,13 +60,16 @@ import com.mongodb.DBObject;
 public class MongoTokenManager extends AbstractTokenManager implements
         OAuthResourceDefs {
 
-	private DBCollection tokens;
+    private DBCollection tokens;
+
+    private DBCollection sessions;
 
     public MongoTokenManager(DB db) {
         tokens = db.getCollection("tokens");
-        		
+        sessions = db.getCollection("sessions");
     }
 
+    @Override
     public Token generateToken(Client client, String username, String[] scope)
             throws OAuthException {
         DBObject token = tokens.findOne(createQuery(client, username));
@@ -99,6 +100,7 @@ public class MongoTokenManager extends AbstractTokenManager implements
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public Token refreshToken(Client client, String refreshToken, String[] scope)
             throws OAuthException {
         DBObject token = tokens.findOne(new BasicDBObject(REFRESH_TOKEN,
@@ -159,7 +161,38 @@ public class MongoTokenManager extends AbstractTokenManager implements
         return query;
     }
 
+    @Override
+    public String storeSession(AuthSession session) throws OAuthException {
+        BasicDBObject sessionObj = new BasicDBObject();
 
+        Map<String, Object> map = session.toMap();
+        for (String key : map.keySet()) {
+            sessionObj.put(key, map.get(key));
+        }
+
+        String code = generateRawCode();
+        sessionObj.put("_id", code);
+
+        sessions.insert(sessionObj);
+
+        return code;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public AuthSession restoreSession(String code) throws OAuthException {
+        DBObject sessionObj = sessions.findOne(new BasicDBObject("_id", code));
+
+        if (sessionObj == null) {
+            throw new OAuthException(OAuthError.invalid_grant, "Invalid code.",
+                    null);
+        }
+
+        return AuthSession.toAuthSession((Map<String, Object>) sessionObj
+                .toMap());
+    }
+
+    @Override
     public Token validateToken(String accessToken) throws OAuthException {
         DBObject token = tokens.findOne(new BasicDBObject(ACCESS_TOKEN,
                 accessToken));
@@ -179,6 +212,7 @@ public class MongoTokenManager extends AbstractTokenManager implements
         return tokenImpl;
     }
 
+    @Override
     public Token findToken(Client client, String username) {
         DBObject token = tokens.findOne(createQuery(client, username));
         if (token == null) {
@@ -187,6 +221,7 @@ public class MongoTokenManager extends AbstractTokenManager implements
         return new MongoToken(token);
     }
 
+    @Override
     public Token[] findTokens(String username) {
         DBCursor cursor = tokens.find(new BasicDBObject(USERNAME, username));
         ArrayList<Token> list = new ArrayList<Token>();
@@ -197,6 +232,7 @@ public class MongoTokenManager extends AbstractTokenManager implements
         return list.toArray(new Token[list.size()]);
     }
 
+    @Override
     public Token[] findTokens(Client client) {
         DBCursor cursor = tokens.find(new BasicDBObject(CLIENT_ID, client
                 .getClientId()));
@@ -208,27 +244,18 @@ public class MongoTokenManager extends AbstractTokenManager implements
         return list.toArray(new Token[list.size()]);
     }
 
+    @Override
     public void revokeToken(Client client, String username) {
         tokens.remove(createQuery(client, username));
     }
 
+    @Override
     public void revokeAllTokens(String username) {
         tokens.remove(new BasicDBObject(USERNAME, username));
     }
 
+    @Override
     public void revokeAllTokens(Client client) {
         tokens.remove(new BasicDBObject(CLIENT_ID, client.getClientId()));
     }
-
-	@Override
-	public String storeSession(AuthSession session) throws OAuthException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public AuthSession restoreSession(String code) throws OAuthException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

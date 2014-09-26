@@ -18,8 +18,8 @@ import com.mongodb.MongoClient;
 
 public class DBDataResource extends ServerResource {
 	
-	DB mMongoDB;
-	JsonConverter mConverter;
+	protected DB mMongoDB;
+	protected JsonConverter mConverter;
 	
 	@Override
 	protected void doInit() throws ResourceException {

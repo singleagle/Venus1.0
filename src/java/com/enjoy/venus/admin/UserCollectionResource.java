@@ -22,6 +22,7 @@ import org.restlet.resource.ServerResource;
 
 import com.enjoy.venus.clientdata.AddUserReq;
 import com.enjoy.venus.clientdata.BaseResponse;
+import com.enjoy.venus.clientdata.JsonResponse;
 import com.enjoy.venus.db.record.UserRecord;
 import com.enjoy.venus.persistence.IEntity;
 import com.enjoy.venus.persistence.mongo.EntityIDMananger;
@@ -43,7 +44,6 @@ import com.mongodb.ServerAddress;
 import com.mongodb.util.JSON;
 
 public class UserCollectionResource extends DBDataResource {
-
 	DBCollection mUserColl;
     
 	@Override
@@ -73,7 +73,9 @@ public class UserCollectionResource extends DBDataResource {
 
 	@Override
 	protected Representation delete() throws ResourceException {
-
+		if(isInRole("admin")){
+			
+		}
 		DBCursor cursor = mUserColl.find();
 		DBObject user = null;
 		while(cursor.hasNext()){

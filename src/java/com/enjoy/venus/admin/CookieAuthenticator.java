@@ -9,6 +9,9 @@ import org.restlet.data.Cookie;
 import org.restlet.data.Method;
 import org.restlet.security.ChallengeAuthenticator;
 
+import com.enjoy.venus.clientdata.BaseResponse;
+import com.enjoy.venus.clientdata.JsonResponse;
+
 
 public class CookieAuthenticator extends ChallengeAuthenticator {
 
@@ -41,7 +44,7 @@ public class CookieAuthenticator extends ChallengeAuthenticator {
 	
    @Override
     public void challenge(Response response, boolean stale) {
-	   JsonResponse<String> invalidatePres = new JsonResponse<String>(JsonResponse.ERROR_UNAUTHORIZED, "invaliade user token", "invaliade user token"); 
+	   JsonResponse<String> invalidatePres = new JsonResponse<String>(BaseResponse.ERROR_UNAUTHORIZED, "invaliade user token", "invaliade user token"); 
 	   response.setEntity(invalidatePres);
    }
 
