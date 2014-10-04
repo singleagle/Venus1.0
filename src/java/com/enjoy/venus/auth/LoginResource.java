@@ -63,6 +63,7 @@ public class LoginResource extends DBDataResource {
 	}
 	
 	
+	
 	@Override
 	protected Representation post(Representation entity)
 			throws ResourceException {
@@ -71,18 +72,24 @@ public class LoginResource extends DBDataResource {
 		Client client = (Client) attrs.get(Client.class.getName());
 		
 		Form form = new Form(entity);
-		int uin = Integer.valueOf(form.getFirstValue("uin"));
+		String uid = form.getFirstValue("uid");
 		String password = form.getFirstValue("password");
-		
-		if(uin == 0 || password == null){
+		if(uid == null || password == null){
 			doError(Status.CLIENT_ERROR_BAD_REQUEST);
 			return null;
 		}
 		
-		BasicDBObject query = new BasicDBObject("uin", uin);
+		BasicDBObject query = new BasicDBObject();
+		
+		if(uid.length() == 11){
+			query.put("phoneNO", uid);
+		}else{
+			query.put("uin", Long.valueOf(uid));
+		}
+		
 		DBObject dbObj = mUserColl.findOne(query);
 		if(dbObj == null){
-			return new JsonResponse<String>(BaseResponse.ERROR_UNAUTHORIZED, "uin not exist!!", null);
+			return new JsonResponse<String>(BaseResponse.ERROR_UNAUTHORIZED, "uid not exist!!", null);
 		}
 		UserRecord record = mConverter.fromEntity(new MongoEntity(dbObj), UserRecord.class);
 		if(!password.equals(record.getPassword())){

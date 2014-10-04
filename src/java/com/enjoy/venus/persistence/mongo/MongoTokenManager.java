@@ -90,9 +90,9 @@ public class MongoTokenManager extends AbstractTokenManager implements
                 (int) (System.currentTimeMillis() / 1000));
 
         // Perform Upsert
-        tokens.createIndex(new BasicDBObject(ACCESS_TOKEN, "1"),
+        tokens.createIndex(new BasicDBObject(ACCESS_TOKEN, 1),
                 new BasicDBObject("unique", true));
-        tokens.createIndex(new BasicDBObject(REFRESH_TOKEN, "1"),
+        tokens.createIndex(new BasicDBObject(REFRESH_TOKEN, 1),
                 new BasicDBObject("unique", true));
         tokens.save(token);
 
@@ -142,9 +142,9 @@ public class MongoTokenManager extends AbstractTokenManager implements
         }
 
         // Perform Upsert
-        tokens.createIndex(new BasicDBObject(ACCESS_TOKEN, "1"),
+        tokens.createIndex(new BasicDBObject(ACCESS_TOKEN, 1),
                 new BasicDBObject("unique", true));
-        tokens.createIndex(new BasicDBObject(REFRESH_TOKEN, "1"),
+        tokens.createIndex(new BasicDBObject(REFRESH_TOKEN, 1),
                 new BasicDBObject("unique", true));
         tokens.save(token);
 

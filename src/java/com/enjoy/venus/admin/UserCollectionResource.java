@@ -50,7 +50,7 @@ public class UserCollectionResource extends DBDataResource {
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		mUserColl = getCollection("user");
-		mUserColl.createIndex(new BasicDBObject("uin", "1"), new BasicDBObject("unique", true));
+		mUserColl.createIndex(new BasicDBObject("uin", 1), new BasicDBObject("unique", true));
 	}
 
 	@Override

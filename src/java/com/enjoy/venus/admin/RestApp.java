@@ -127,7 +127,7 @@ public class RestApp extends org.restlet.Application{
         authenticator.setVerifier(verifier);  
         //将路由器放在认证器之后  
         authenticator.setNext(secRouter); 
-        mRouter.attach("/sec", authenticator);
+        mRouter.attach("/sec", secRouter);
         
 		return mRouter;
 	}

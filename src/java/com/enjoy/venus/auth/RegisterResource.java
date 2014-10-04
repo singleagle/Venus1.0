@@ -33,7 +33,7 @@ public class RegisterResource extends DBDataResource {
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		mUserColl = getCollection("user");
-		mUserColl.createIndex(new BasicDBObject("uin", "1"), new BasicDBObject("unique", true));
+		mUserColl.createIndex(new BasicDBObject("uin", 1), new BasicDBObject("unique", true));
 	}
 	
 	
@@ -44,8 +44,8 @@ public class RegisterResource extends DBDataResource {
 		MongoClient mgClient = (MongoClient) getApplication().getContext().getAttributes().get(RestApp.ATTR_DBCLIEN);
 		Form form = new Form(entity);
 		RegisterAccountReq req = new RegisterAccountReq();
-		req.setNickName(form.getFirstValue("nickName"));
-		req.setPhoneNO(form.getFirstValue("phoneNO"));
+		req.setNickName(form.getFirstValue("nickname"));
+		req.setPhoneNO(form.getFirstValue("phoneno"));
 		req.setPassword(form.getFirstValue("password"));
 		
 		if(req.getNickName() == null || req.getPhoneNO() == null 
@@ -63,6 +63,9 @@ public class RegisterResource extends DBDataResource {
 		EntityIDMananger idManager = new EntityIDMananger(mgClient);
 		long uin = idManager.generateUIN();
 		UserRecord userRecord = new UserRecord(uin, req.getNickName());
+		if(userRecord.getName() == null){
+			userRecord.setName(String.valueOf(uin));
+		}
 		userRecord.setPhoneNO(req.getPhoneNO());
 		userRecord.setPassword(req.getPassword());
     	IEntity record = mConverter.toEntity(userRecord);
