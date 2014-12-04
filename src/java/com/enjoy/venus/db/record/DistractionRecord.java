@@ -23,7 +23,8 @@ public class DistractionRecord {
 	
 	private String destination;//目的地
 	private double[] location = new double[2];
-	private ArrayList<Long> teamMemberList;
+	//private ArrayList<Long> teamMemberList;
+	private String groupId;
 	private ArrayList<String> tagList;
 	private PayType payType;
 	private int maxMemberCount;
@@ -129,14 +130,14 @@ public class DistractionRecord {
 		return location.clone();
 	}
 
-	public ArrayList<Long> getTeamMemberList() {
-		return teamMemberList;
+	public String getGroupId() {
+		return groupId;
 	}
 
 
 
-	public void setTeamMemberList(ArrayList<Long> teamMemberList) {
-		this.teamMemberList = teamMemberList;
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
 	}
 
 

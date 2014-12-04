@@ -11,8 +11,8 @@ import org.restlet.resource.ServerResource;
 
 import com.enjoy.venus.admin.DBDataResource;
 import com.enjoy.venus.admin.RestApp;
-import com.enjoy.venus.clientdata.JsonResponse;
 import com.enjoy.venus.db.record.UserRecord;
+import com.enjoy.venus.dto.JsonResponse;
 import com.enjoy.venus.persistence.IEntity;
 import com.enjoy.venus.persistence.mongo.MongoEntity;
 import com.mongodb.BasicDBObject;

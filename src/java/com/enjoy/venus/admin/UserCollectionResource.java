@@ -20,12 +20,13 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import com.enjoy.venus.clientdata.AddUserReq;
-import com.enjoy.venus.clientdata.BaseResponse;
-import com.enjoy.venus.clientdata.JsonResponse;
 import com.enjoy.venus.db.record.UserRecord;
+import com.enjoy.venus.dto.AddUserReq;
+import com.enjoy.venus.dto.BaseResponse;
+import com.enjoy.venus.dto.JsonResponse;
+import com.enjoy.venus.dto.UserDTO;
 import com.enjoy.venus.persistence.IEntity;
-import com.enjoy.venus.persistence.mongo.EntityIDMananger;
+import com.enjoy.venus.persistence.mongo.EntityIDManager;
 import com.enjoy.venus.persistence.mongo.JsonConverter;
 import com.enjoy.venus.persistence.mongo.MongoEntity;
 import com.google.gson.Gson;
@@ -60,21 +61,21 @@ public class UserCollectionResource extends DBDataResource {
 		DBObject user = null;
 		UserRecord record = null;
 		
-		ArrayList<UserRecord> userList = new ArrayList<UserRecord>(cursor.count());
+		ArrayList<UserDTO> userList = new ArrayList<UserDTO>(cursor.count());
 		while(cursor.hasNext()){
 			user = cursor.next();
-			record = mConverter.fromEntity(new MongoEntity(user), UserRecord.class);
-			userList.add(record);
+			record = getJsonConverter().fromEntity(new MongoEntity(user), UserRecord.class);
+			userList.add(new UserDTO(record));
 		}
-		return new GsonRepresentation<ArrayList<UserRecord>>(userList);
+		return new JsonResponse<ArrayList<UserDTO>>(userList);
 		
 	}
 
 
 	@Override
 	protected Representation delete() throws ResourceException {
-		if(isInRole("admin")){
-			
+		if(!isInRole("admin")){
+			return null;
 		}
 		DBCursor cursor = mUserColl.find();
 		DBObject user = null;
@@ -88,7 +89,7 @@ public class UserCollectionResource extends DBDataResource {
 	
     private IEntity creatUserRecord(UserRecord userRecord, String password){
     	userRecord.setPassword(password);
-    	IEntity entity = mConverter.toEntity(userRecord);
+    	IEntity entity = getJsonConverter().toEntity(userRecord);
     	mUserColl.insert(entity);
 		return entity;
     }
@@ -97,9 +98,7 @@ public class UserCollectionResource extends DBDataResource {
 	protected Representation post(Representation entity)
 			throws ResourceException {
 		
-		MongoClient mgClient = (MongoClient) getApplication().getContext().getAttributes().get(RestApp.ATTR_DBCLIEN);
-		
-		EntityIDMananger idManager = new EntityIDMananger(mgClient);
+		EntityIDManager idManager = getEntityIDManager();
 		long uin = idManager.generateUIN();
 		AddUserReq req = null;
 		if(MediaType.APPLICATION_JSON.equals(entity.getMediaType())){
@@ -120,12 +119,10 @@ public class UserCollectionResource extends DBDataResource {
 			req.setPassword(form.getFirstValue("password"));
 		}
 		
-
-		
 		UserRecord userRecord = new UserRecord(uin, req.getName());
 		IEntity record = creatUserRecord(userRecord, req.getPassword());
 		
-		return  new JsonResponse<UserRecord>(userRecord);
+		return  new JsonResponse<UserDTO>(new UserDTO(userRecord));
 	}
 	
     private String makePasswordHash(String password, String salt) {

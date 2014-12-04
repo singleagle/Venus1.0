@@ -11,13 +11,14 @@ import org.restlet.resource.ServerResource;
 
 import com.enjoy.venus.admin.DBDataResource;
 import com.enjoy.venus.admin.RestApp;
-import com.enjoy.venus.clientdata.AddUserReq;
-import com.enjoy.venus.clientdata.BaseResponse;
-import com.enjoy.venus.clientdata.JsonResponse;
-import com.enjoy.venus.clientdata.RegisterAccountReq;
 import com.enjoy.venus.db.record.UserRecord;
+import com.enjoy.venus.dto.AddUserReq;
+import com.enjoy.venus.dto.BaseResponse;
+import com.enjoy.venus.dto.JsonResponse;
+import com.enjoy.venus.dto.RegisterAccountReq;
+import com.enjoy.venus.dto.UserDTO;
 import com.enjoy.venus.persistence.IEntity;
-import com.enjoy.venus.persistence.mongo.EntityIDMananger;
+import com.enjoy.venus.persistence.mongo.EntityIDManager;
 import com.enjoy.venus.persistence.mongo.MongoEntity;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -41,7 +42,6 @@ public class RegisterResource extends DBDataResource {
 	protected Representation post(Representation entity)
 			throws ResourceException {
 		
-		MongoClient mgClient = (MongoClient) getApplication().getContext().getAttributes().get(RestApp.ATTR_DBCLIEN);
 		Form form = new Form(entity);
 		RegisterAccountReq req = new RegisterAccountReq();
 		req.setNickName(form.getFirstValue("nickname"));
@@ -60,7 +60,7 @@ public class RegisterResource extends DBDataResource {
 			return new JsonResponse<String>(BaseResponse.ERROR_BAD_REQUEST, "phoneNo had registed!", null);
 		}
 		
-		EntityIDMananger idManager = new EntityIDMananger(mgClient);
+		EntityIDManager idManager =  getEntityIDManager();
 		long uin = idManager.generateUIN();
 		UserRecord userRecord = new UserRecord(uin, req.getNickName());
 		if(userRecord.getName() == null){
@@ -68,10 +68,9 @@ public class RegisterResource extends DBDataResource {
 		}
 		userRecord.setPhoneNO(req.getPhoneNO());
 		userRecord.setPassword(req.getPassword());
-    	IEntity record = mConverter.toEntity(userRecord);
+    	IEntity record = getJsonConverter().toEntity(userRecord);
     	mUserColl.insert(record);
-    	userRecord.setPassword(null);
-    	return  new JsonResponse<UserRecord>(userRecord);
+    	return  new JsonResponse<UserDTO>(new UserDTO(userRecord));
 	}
 }
 

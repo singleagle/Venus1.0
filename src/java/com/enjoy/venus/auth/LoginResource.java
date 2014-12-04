@@ -18,11 +18,11 @@ import org.restlet.resource.ServerResource;
 
 import com.enjoy.venus.admin.DBDataResource;
 import com.enjoy.venus.admin.RestApp;
-import com.enjoy.venus.clientdata.BaseResponse;
-import com.enjoy.venus.clientdata.JsonResponse;
-import com.enjoy.venus.clientdata.LoginResult;
-import com.enjoy.venus.clientdata.RegisterAccountReq;
 import com.enjoy.venus.db.record.UserRecord;
+import com.enjoy.venus.dto.BaseResponse;
+import com.enjoy.venus.dto.JsonResponse;
+import com.enjoy.venus.dto.LoginResult;
+import com.enjoy.venus.dto.RegisterAccountReq;
 import com.enjoy.venus.persistence.IEntity;
 import com.enjoy.venus.persistence.mongo.MongoEntity;
 import com.mongodb.BasicDBObject;
@@ -80,20 +80,26 @@ public class LoginResource extends DBDataResource {
 		}
 		
 		BasicDBObject query = new BasicDBObject();
-		
-		if(uid.length() == 11){
-			query.put("phoneNO", uid);
-		}else{
-			query.put("uin", Long.valueOf(uid));
+		try{
+			long number = Long.parseLong(uid);
+			if(uid.length() == 11){
+				query.put("phoneNO", uid);
+			}else{
+				query.put("uin", Long.valueOf(uid));
+			}
+		}catch(NumberFormatException e){
+			query.put("name", uid);
 		}
-		
+
 		DBObject dbObj = mUserColl.findOne(query);
 		if(dbObj == null){
-			return new JsonResponse<String>(BaseResponse.ERROR_UNAUTHORIZED, "uid not exist!!", null);
+			doError(Status.CLIENT_ERROR_UNAUTHORIZED);
+			return null;
 		}
-		UserRecord record = mConverter.fromEntity(new MongoEntity(dbObj), UserRecord.class);
+		UserRecord record = getJsonConverter().fromEntity(new MongoEntity(dbObj), UserRecord.class);
 		if(!password.equals(record.getPassword())){
-			return new JsonResponse<String>(BaseResponse.ERROR_UNAUTHORIZED, "password error!!", null);
+			doError(Status.CLIENT_ERROR_UNAUTHORIZED);
+			return null;
 		}
 		Token token;
 		try {
@@ -103,7 +109,8 @@ public class LoginResource extends DBDataResource {
 			e.printStackTrace();
 		}
 		
-		return new JsonResponse<String>(BaseResponse.ERROR_UNAUTHORIZED, "generate token error!", null);
+		doError(Status.CLIENT_ERROR_UNAUTHORIZED);
+		return null;
 		
 	}
 }

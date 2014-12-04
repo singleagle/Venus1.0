@@ -72,6 +72,15 @@ public class UserRecord /*implements IPOJOable*/ {
 		this.headerImgUrl = headerImgUrl;
 	}
 	
+	
+	public int getSexType() {
+		return sexType;
+	}
+
+	public void setSexType(int sexType) {
+		this.sexType = sexType;
+	}
+
 	public void writeToEntity(IEntity dest, int flags) {
 		dest.put("uin", uin);
 		dest.put("name", name);

@@ -1,9 +1,13 @@
 package com.enjoy.venus.admin;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentMap;
+import java.util.logging.LogManager;
 
 import javax.management.RuntimeErrorException;
 import javax.servlet.http.HttpSession;
@@ -33,6 +37,9 @@ import com.enjoy.venus.auth.RegisterResource;
 import com.enjoy.venus.persistence.PersistenceEntityFactory;
 import com.enjoy.venus.persistence.mongo.MongoClientManager;
 import com.enjoy.venus.persistence.mongo.MongoTokenManager;
+import com.enjoy.venus.res.DATypeRes;
+import com.enjoy.venus.res.DistractionCollectionResource;
+import com.enjoy.venus.res.DistractionResource;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
@@ -50,6 +57,11 @@ public class RestApp extends org.restlet.Application{
 	public static final String DISTRACTIONS = "/distractions";
 	public static final String DISTRACTION_VARIABLE = "actionId";
 	public static final String DISTRACTION_SEGMENT = "/{" + DISTRACTION_VARIABLE + "}";
+	public static final String DISTRACTION_TYPE = "/datypes";
+	
+	public static final String DB_USER_NAME = "4c5OS5cGGjmPr4ERO1gcByk8";
+	public static final String DB_USER_PWD = "LzvELOKlwM66OGZpdApUYtrTA7FopDgj";
+	public static final String DB_VENUS_NAME = "wlkqnuQHpoaIYnLikclm";
 	
 	Router mRouter;
 	private TokenManager mTokenManager;
@@ -61,21 +73,33 @@ public class RestApp extends org.restlet.Application{
 	
 	public RestApp(){
 		super();
+		//System.setProperty("java.util.logging.config.file", "logging.properties");
+		try {
+			InputStream conf = getClass().getResourceAsStream("logging.properties");
+			LogManager manager = LogManager.getLogManager();
+			LogManager.getLogManager().readConfiguration(conf);
+		} catch (SecurityException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
 		mRouter = new Router(getContext());
 		ServerAddress serverAddress = null;
 		try {
-			serverAddress = new ServerAddress("127.0.0.1", 27017);
+			serverAddress = new ServerAddress("127.0.0.1");
 		} catch (UnknownHostException e) {
 			throw new RuntimeException("UnknownHostException");
 		}
 		
 		MongoClientOptions.Builder optionBuider = new MongoClientOptions.Builder();
-		optionBuider.legacyDefaults();
-		MongoCredential credential = MongoCredential.createMongoCRCredential("tangwh", "venus", "yl04688".toCharArray());
+		optionBuider.cursorFinalizerEnabled(false);
+		MongoCredential credential = MongoCredential.createMongoCRCredential(DB_USER_NAME, DB_VENUS_NAME, DB_USER_PWD.toCharArray());
 		ArrayList<MongoCredential> credentialList = new ArrayList<MongoCredential>(1);
 		credentialList.add(credential);
 		mMongoClient = new MongoClient(serverAddress, credentialList, optionBuider.build());
-		DB venus = mMongoClient.getDB("venus");
+	    DB venus = mMongoClient.getDB(DB_VENUS_NAME);
+	    venus.authenticate(DB_USER_NAME, DB_USER_PWD.toCharArray());
 		mTokenManager = new MongoTokenManager(venus);
 		mAuthClientManager = new MemoryClientManager();
 		
@@ -117,7 +141,7 @@ public class RestApp extends org.restlet.Application{
 	    secRouter.attach(USERS + USERID_SEGMENT, UserResource.class);
 	    secRouter.attach(DISTRACTIONS, DistractionCollectionResource.class);
 	    secRouter.attach(DISTRACTIONS + DISTRACTION_SEGMENT , DistractionResource.class);
-		
+	    secRouter.attach(DISTRACTION_TYPE, DATypeRes.class);
         //创建认证器  
         ChallengeAuthenticator authenticator = new ChallengeAuthenticator(getContext(), ChallengeScheme.HTTP_BASIC,   
                 "Venus Realm");  

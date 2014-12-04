@@ -9,8 +9,8 @@ import org.restlet.data.Cookie;
 import org.restlet.data.Method;
 import org.restlet.security.ChallengeAuthenticator;
 
-import com.enjoy.venus.clientdata.BaseResponse;
-import com.enjoy.venus.clientdata.JsonResponse;
+import com.enjoy.venus.dto.BaseResponse;
+import com.enjoy.venus.dto.JsonResponse;
 
 
 public class CookieAuthenticator extends ChallengeAuthenticator {
